@@ -24,20 +24,29 @@ The `cloudflare/` directory contains the download Worker. It serves only
 `latest.ini`, `control-center/`, `firmware/`, and `dashboards/` from the private
 `vi-controller-updates` R2 bucket. Bucket listing is never exposed.
 
+Production endpoint:
+
+`https://vi-update-downloads.velocitasimperium.workers.dev`
+
 Initial deployment:
 
 1. Enable R2 for the Cloudflare account.
 2. Run `npx wrangler r2 bucket create vi-controller-updates`.
 3. Run `powershell -ExecutionPolicy Bypass -File cloudflare/upload-updates.ps1`.
 4. Run `npx wrangler deploy --config cloudflare/wrangler.jsonc`.
-5. Test `https://vi-update-downloads.<account-subdomain>.workers.dev/latest.ini`.
-6. Attach the production custom domain and replace the GitHub URLs in
-   `latest.ini` and the plugin's manifest URL only after the endpoint is tested.
+5. Test `https://vi-update-downloads.velocitasimperium.workers.dev/latest.ini`.
+6. Optionally attach a custom download domain later and change the manifest host
+   in a normal versioned release.
 
 Versioned packages use a one-year immutable cache. The mutable manifest uses a
 60-second cache so new releases appear promptly. Cloudflare request analytics can
 group traffic by country and requested path without placing an identifier in the
 plugin.
+
+For subsequent releases, update the packages and `latest.ini`, then run
+`powershell -ExecutionPolicy Bypass -File cloudflare/upload-updates.ps1`. The
+script reads each five-version history from the manifest and uploads packages
+before publishing the new manifest.
 
 ## Current test update
 
