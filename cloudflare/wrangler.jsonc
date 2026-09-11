@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vi-update-downloads",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-11",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
+  "r2_buckets": [
+    {
+      "binding": "UPDATES",
+      "bucket_name": "vi-controller-updates"
+    }
+  ]
+}
